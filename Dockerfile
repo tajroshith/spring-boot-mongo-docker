@@ -1,5 +1,8 @@
 FROM openjdk:8-alpine
 
+ARG branchName development
+LABEL Branch=$branchName
+
 # Required for starting application up.
 RUN apk update && apk add /bin/sh
 
