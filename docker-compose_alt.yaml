@@ -1,0 +1,41 @@
+services:
+    springapp: 
+        image: zookl0/springapp:VERSION
+        ports:
+        - 8080:8080
+        depends_on:
+        - mongo
+        networks:
+        - springapp
+        environment:
+        - MONGO_DB_HOSTNAME=mongo
+        - MONGO_DB_USERNAME=devdb
+        - MONGO_DB_PASSWORD=devdb@123
+        deploy:  # This will be considered only in docker swarm.
+           mode: replicated # Default is replicated. No need to specify if its replicated mode.
+           replicas: 2
+           update_config:
+             parallelism: 1
+             delay: 20s
+           restart_policy:
+             condition: on-failure
+             delay: 10s
+             max_attempts: 5
+           placement:
+             constraints:
+               - node.role==worker
+    mongo:
+        image: mongo
+        volumes:
+        - mongovol:/data/db
+        networks:
+        - springapp
+        environment:
+        - MONGO_INITDB_ROOT_USERNAME=devdb
+        - MONGO_INITDB_ROOT_PASSWORD=devdb@123
+volumes:
+   mongovol:
+      external: true
+networks:
+   springapp:
+      external: true
