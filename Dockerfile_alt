@@ -1,0 +1,14 @@
+FROM maven:3.8.7-openjdk-18-slim as first 
+WORKDIR /app
+COPY . .
+RUN mvn clean package
+
+FROM openjdk:8-alpine
+ARG branchName development
+LABEL Branch=$branchName
+RUN apk update  && apk add /bin/sh && mkdir -p /opt/app
+ENV PROJECT_HOME /opt/app
+WORKDIR $PROJECT_HOME
+COPY --from=first /app/target/spring-boot-mongo-1.0.jar $PROJECT_HOME/spring-boot-mongo-1.0.jar
+EXPOSE 8080
+CMD ["java", "-jar", "./spring-boot-mongo-1.0.jar"]
