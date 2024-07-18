@@ -8,9 +8,9 @@ services:
         networks:
         - springapp
         environment:
-        - MONGO_DB_HOSTNAME=mongo
-        - MONGO_DB_USERNAME=devdb
-        - MONGO_DB_PASSWORD=devdb@123
+        - MONGO_DB_HOSTNAME=${MONGO_DB_HOSTNAME}
+        - MONGO_DB_USERNAME=${MONGO_DB_USERNAME}
+        - MONGO_DB_PASSWORD=${MONGO_DB_PASSWORD}
         deploy:  # This will be considered only in docker swarm.
            mode: replicated # Default is replicated. No need to specify if its replicated mode.
            replicas: 2
@@ -31,8 +31,8 @@ services:
         networks:
         - springapp
         environment:
-        - MONGO_INITDB_ROOT_USERNAME=devdb
-        - MONGO_INITDB_ROOT_PASSWORD=devdb@123
+        - MONGO_INITDB_ROOT_USERNAME=${MONGO_DB_USERNAME}
+        - MONGO_INITDB_ROOT_PASSWORD=${MONGO_DB_PASSWORD}
         deploy:
           mode: replicated
           replicas: 1
