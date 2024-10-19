@@ -1,0 +1,71 @@
+services:
+    springapp:
+         image: 590183929966.dkr.ecr.ap-south-1.amazonaws.com/springapp:VERSION
+         ports:
+         - 80:8080
+         networks:
+         - springnet
+         secrets:
+         - db-username
+         - db-pass
+         environment:
+         - MONGO_DB_HOSTNAME=mongo
+         - MONGO_DB_USERNAME=/run/secrets/db-username
+         - MONGO_DB_PASSWORD=/run/secrets/db-pass
+         deploy:
+           mode: replicated
+           replicas: 2
+           placement:
+             constraints:
+               - node.role==worker
+           restart_policy:
+              condition: on-failure
+              delay: 5s
+              max_attempts: 3
+              window: 120s
+           update_config:
+              parallelism: 2
+              delay: 10s
+              order: stop-first
+         healthcheck:
+           test: ["CMD", "curl", "-f", "http://localhost:8080"]
+           interval: 1m30s
+           timeout: 10s
+           retries: 3
+           start_period: 40s
+           start_interval: 5s
+    mongo:
+         image: mongo
+         networks:
+         - springnet
+         volumes:
+         - mongo-vol:/data/db
+         secrets:
+         - db-username
+         - db-pass
+         deploy:
+           placement:
+              constraints:
+                - node.role==worker
+         environment:
+         - MONGO_INITDB_ROOT_USERNAME=/run/secrets/db-username
+         - MONGO_INITDB_ROOT_PASSWORD=/run/secrets/db-pass    
+         healthcheck:
+           test: ["CMD", "curl", "-f", "http://localhost:27017"]
+           interval: 1m30s
+           timeout: 10s
+           retries: 3
+           start_period: 40s
+           start_interval: 5s
+
+secrets:
+   db-username:
+     external: true
+   db-pass:
+     external: true
+networks:
+    springnet:
+        driver: overlay
+volumes:
+    mongo-vol:
+        driver: local
