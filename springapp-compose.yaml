@@ -50,14 +50,6 @@ services:
          environment:
          - MONGO_INITDB_ROOT_USERNAME=/run/secrets/db-username
          - MONGO_INITDB_ROOT_PASSWORD=/run/secrets/db-pass    
-         healthcheck:
-           test: ["CMD", "curl", "-f", "http://localhost:27017"]
-           interval: 1m30s
-           timeout: 10s
-           retries: 3
-           start_period: 40s
-           start_interval: 5s
-
 secrets:
    db-username:
      external: true
