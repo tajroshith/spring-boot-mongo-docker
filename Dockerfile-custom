@@ -1,0 +1,10 @@
+FROM eclipse-temurin:17-jdk-alpine
+ARG branchName=main
+LABEL Branch=$branchName
+ENV APP_HOME=/app
+WORKDIR /app
+COPY target/spring-boot-mongo-1.0.jar app.jar
+RUN adduser -D appuser
+USER appuser
+EXPOSE 8080
+CMD ["java", "-jar", "app.jar"]
