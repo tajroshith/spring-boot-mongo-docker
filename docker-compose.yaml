@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+   springapp:
+       image: zookl0/springapp:VERSION
+       restart: always
+       ports:
+       - 8080:8080
+       networks:
+       - mongonw
+       environment:
+       - MONGO_DB_HOSTNAME=mongodb
+       - MONGO_DB_USERNAME=admin
+       - MONGO_DB_PASSWORD=1234
+       depends_on:
+       - mongodb
+
+   mongodb:
+       image: mongo
+       restart: always
+       ports:
+       - 27017:27017
+       networks:
+       - mongonw
+       environment:
+       - MONGO_INITDB_ROOT_USERNAME=admin
+       - MONGO_INITDB_ROOT_PASSWORD=1234
+       volumes:
+       - mongovol:/data/db
+
+volumes:
+   mongovol:
+     driver: local
+networks:
+   mongonw:
+     driver: bridge
