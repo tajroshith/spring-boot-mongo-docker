@@ -96,13 +96,13 @@
             <repository>
               <id>maven-releases</id>
               <name>Maven Web App Releases Repository</name>
-              <url>http://43.205.236.37:8081/repository/maven-releases/</url>
+              <url>http://65.0.93.71:8081/repository/maven-releases/</url>
             </repository>
 
             <snapshotRepository>
               <id>maven-snapshots</id>
               <name>Maven Web App Snapshot Repository</name>
-              <url>http://43.205.236.37:8081/repository/maven-snapshots/</url>
+              <url>http://65.0.93.71:8081/repository/maven-snapshots/</url>
             </snapshotRepository>
 
         </distributionManagement>
